@@ -182,29 +182,17 @@ def mock_element_handle(element, page) -> None:
 
 
 class ElementHandle:
-    async def click(
-        element,
-        page,
-        button="left",
-        click_count=1,
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def click(self, page, button="left", click_count=1, delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -219,28 +207,17 @@ class ElementHandle:
             for modifier in modifiers:
                 await frame.page.keyboard.up(modifier)
 
-    async def dblclick(
-        element,
-        page,
-        button="left",
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def dblclick(self, page, button="left", delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -255,28 +232,20 @@ class ElementHandle:
             for modifier in modifiers:
                 await frame.page.keyboard.up(modifier)
 
-    async def check(
-        element,
-        page,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def check(self, page, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
-        if await element.is_checked():
+        if await self.is_checked():
             return
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -285,30 +254,22 @@ class ElementHandle:
 
             await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert await element.is_checked()
+            assert await self.is_checked()
 
-    async def uncheck(
-        element,
-        page,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def uncheck(self, page, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
-        if not await element.is_checked():
+        if not await self.is_checked():
             return
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -317,31 +278,22 @@ class ElementHandle:
 
             await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert not await element.is_checked()
+            assert not await self.is_checked()
 
-    async def set_checked(
-        element,
-        page,
-        checked=False,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def set_checked(self, page, checked=False, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
-        if await element.is_checked() == checked:
+        if await self.is_checked() == checked:
             return
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -350,27 +302,19 @@ class ElementHandle:
 
             await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert await element.is_checked()
+            assert await self.is_checked()
 
-    async def hover(
-        element,
-        page,
-        force=False,
-        modifiers=[],
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        frame = element.owner_frame()
+    async def hover(self, page, force=False, modifiers=[], position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        frame = self.owner_frame()
 
         if not force:
-            await element.wait_for_element_state("editable", timeout=timeout)
+            await self.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
             if page.scroll_into_view:
-                await element.scroll_into_view_if_needed(timeout=timeout)
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await element.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -385,17 +329,15 @@ class ElementHandle:
             for modifier in modifiers:
                 await frame.page.keyboard.up(modifier)
 
-    async def type(
-        element, page, text, delay=50, no_wait_after=False, timeout: typing.Optional[float] = None
-    ) -> None:
-        frame = element.owner_frame()
+    async def type(self, page, text, delay=50, no_wait_after=False, timeout: typing.Optional[float] = None) -> None:
+        frame = self.owner_frame()
 
-        await element.wait_for_element_state("editable", timeout=timeout)
+        await self.wait_for_element_state("editable", timeout=timeout)
 
         if page.scroll_into_view:
-            await element.scroll_into_view_if_needed(timeout=timeout)
+            await self.scroll_into_view_if_needed(timeout=timeout)
 
-        boundings = await element.bounding_box()
+        boundings = await self.bounding_box()
         x, y, width, height = boundings.values()
 
         x, y = x + width // 2, y + height // 2
