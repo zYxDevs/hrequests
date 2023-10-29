@@ -200,26 +200,15 @@ def mock_locator(locator) -> None:
 
 
 class Locator:
-    async def click(
-        locator,
-        button="left",
-        click_count=1,
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def click(self, button="left", click_count=1, delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
 
             if not position:
@@ -228,32 +217,22 @@ class Locator:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await locator.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await locator.page.mouse.click(x, y, button, click_count, delay)
+            await self.page.mouse.click(x, y, button, click_count, delay)
 
             for modifier in modifiers:
-                await locator.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def dblclick(
-        locator,
-        button="left",
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def dblclick(self, button="left", delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -261,117 +240,88 @@ class Locator:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await locator.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await locator.page.mouse.dblclick(x, y, button, delay)
+            await self.page.mouse.dblclick(x, y, button, delay)
 
             for modifier in modifiers:
-                await locator.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def check(
-        locator,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def check(self, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
-        if await locator.is_checked():
+        if await self.is_checked():
             return
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await locator.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert await locator.is_checked()
+            assert await self.is_checked()
 
-    async def uncheck(
-        locator,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def uncheck(self, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
-        if not await locator.is_checked():
+        if not await self.is_checked():
             return
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await locator.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert not await locator.is_checked()
+            assert not await self.is_checked()
 
-    async def set_checked(
-        locator,
-        checked=False,
-        force=False,
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def set_checked(self, checked=False, force=False, no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
-        if await locator.is_checked() == checked:
+        if await self.is_checked() == checked:
             return
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await locator.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
-            assert await locator.is_checked()
+            assert await self.is_checked()
 
-    async def hover(
-        locator,
-        force=False,
-        modifiers=[],
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
+    async def hover(self, force=False, modifiers=[], position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
         if not force:
-            await locator.wait_for(state="visible", timeout=timeout)
+            await self.wait_for(state="visible", timeout=timeout)
 
         if not trial:
-            if locator.page.scroll_into_view:
-                await locator.scroll_into_view_if_needed(timeout=timeout)
+            if self.page.scroll_into_view:
+                await self.scroll_into_view_if_needed(timeout=timeout)
 
-            boundings = await locator.bounding_box()
+            boundings = await self.bounding_box()
             x, y, width, height = boundings.values()
             if not position:
                 x, y = x + width // 2, y + height // 2
@@ -379,26 +329,24 @@ class Locator:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await locator.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await locator.page.mouse.move(x, y)
+            await self.page.mouse.move(x, y)
 
             for modifier in modifiers:
-                await locator.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def type(
-        locator, text, delay=200, no_wait_after=False, timeout: typing.Optional[float] = None
-    ) -> None:
-        await locator.wait_for(state="visible", timeout=timeout)
+    async def type(self, text, delay=200, no_wait_after=False, timeout: typing.Optional[float] = None) -> None:
+        await self.wait_for(state="visible", timeout=timeout)
 
-        if locator.page.scroll_into_view:
-            await locator.scroll_into_view_if_needed(timeout=timeout)
+        if self.page.scroll_into_view:
+            await self.scroll_into_view_if_needed(timeout=timeout)
 
-        boundings = await locator.bounding_box()
+        boundings = await self.bounding_box()
         x, y, width, height = boundings.values()
 
         x, y = x + width // 2, y + height // 2
 
-        await locator.page.mouse.click(x, y, "left", 1, delay)
+        await self.page.mouse.click(x, y, "left", 1, delay)
 
-        await locator.page.keyboard.type(text, delay=delay)
+        await self.page.keyboard.type(text, delay=delay)

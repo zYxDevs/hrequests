@@ -109,10 +109,7 @@ class BrowserSession:
         self.proxy_ip: Optional[str] = proxy_ip
         # browser config
         self.status_code: Optional[int]
-        if self.resp is not None:
-            self.status_code = self.resp.status_code
-        else:
-            self.status_code = None
+        self.status_code = self.resp.status_code if self.resp is not None else None
         self.mock_human: bool = mock_human
         self.headless: bool = headless
         self.extensions: Optional[List[Extension]] = (

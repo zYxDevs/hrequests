@@ -273,29 +273,19 @@ def mock_frame(frame) -> None:
 
 
 class Frame:
-    async def click(
-        frame,
-        selector,
-        button="left",
-        click_count=1,
-        strict=False,
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def click(self, selector, button="left", click_count=1, strict=False, delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
             await element.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -306,35 +296,26 @@ class Frame:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await frame.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await frame.page.mouse.click(x, y, button, click_count, delay)
+            await self.page.mouse.click(x, y, button, click_count, delay)
 
             for modifier in modifiers:
-                await frame.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def dblclick(
-        frame,
-        selector,
-        button="left",
-        strict=False,
-        delay=20,
-        force=False,
-        modifiers=[],
-        no_wait_after=False,
-        position={},
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def dblclick(self, selector, button="left", strict=False, delay=20, force=False, modifiers=[], no_wait_after=False, position={}, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
             await element.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -345,25 +326,19 @@ class Frame:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await frame.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await frame.page.mouse.dblclick(x, y, button, delay)
+            await self.page.mouse.dblclick(x, y, button, delay)
 
             for modifier in modifiers:
-                await frame.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def check(
-        frame,
-        selector,
-        force=False,
-        no_wait_after=False,
-        position={},
-        strict=False,
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def check(self, selector, force=False, no_wait_after=False, position={}, strict=False, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
@@ -373,7 +348,7 @@ class Frame:
             return
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -383,22 +358,16 @@ class Frame:
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
             assert await element.is_checked()
 
-    async def uncheck(
-        frame,
-        selector,
-        force=False,
-        no_wait_after=False,
-        position={},
-        strict=False,
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def uncheck(self, selector, force=False, no_wait_after=False, position={}, strict=False, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
@@ -408,7 +377,7 @@ class Frame:
             return
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -418,23 +387,16 @@ class Frame:
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
             assert not await element.is_checked()
 
-    async def set_checked(
-        frame,
-        selector,
-        checked=False,
-        force=False,
-        no_wait_after=False,
-        position={},
-        strict=False,
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def set_checked(self, selector, checked=False, force=False, no_wait_after=False, position={}, strict=False, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
@@ -444,7 +406,7 @@ class Frame:
             return
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -454,29 +416,23 @@ class Frame:
             else:
                 x, y = x + position["x"], y + position["y"]
 
-            await frame.page.mouse.click(x, y, button="left", click_count=1, delay=20)
+            await self.page.mouse.click(x, y, button="left", click_count=1, delay=20)
 
             assert await element.is_checked()
 
-    async def hover(
-        frame,
-        selector,
-        force=False,
-        modifiers=[],
-        position={},
-        strict=False,
-        timeout: typing.Optional[float] = None,
-        trial=False,
-    ) -> None:
-        element = await frame.wait_for_selector(
-            selector, state="visible" if not force else "hidden", strict=strict, timeout=timeout
+    async def hover(self, selector, force=False, modifiers=[], position={}, strict=False, timeout: typing.Optional[float] = None, trial=False) -> None:
+        element = await self.wait_for_selector(
+            selector,
+            state="visible" if not force else "hidden",
+            strict=strict,
+            timeout=timeout,
         )
 
         if not force:
             await element.wait_for_element_state("editable", timeout=timeout)
 
         if not trial:
-            if frame.page.scroll_into_view:
+            if self.page.scroll_into_view:
                 await locator.scroll_into_view_if_needed(timeout=timeout)
 
             boundings = await element.bounding_box()
@@ -487,29 +443,21 @@ class Frame:
                 x, y = x + position["x"], y + position["y"]
 
             for modifier in modifiers:
-                await frame.page.keyboard.down(modifier)
+                await self.page.keyboard.down(modifier)
 
-            await frame.page.mouse.move(x, y)
+            await self.page.mouse.move(x, y)
 
             for modifier in modifiers:
-                await frame.page.keyboard.up(modifier)
+                await self.page.keyboard.up(modifier)
 
-    async def type(
-        frame,
-        selector,
-        text,
-        delay=200,
-        no_wait_after=False,
-        strict=False,
-        timeout: typing.Optional[float] = None,
-    ) -> None:
-        element = await frame.wait_for_selector(
+    async def type(self, selector, text, delay=200, no_wait_after=False, strict=False, timeout: typing.Optional[float] = None) -> None:
+        element = await self.wait_for_selector(
             selector, state="visible", strict=strict, timeout=timeout
         )
 
         await element.wait_for_element_state("editable", timeout=timeout)
 
-        if frame.page.scroll_into_view:
+        if self.page.scroll_into_view:
             await locator.scroll_into_view_if_needed(timeout=timeout)
 
         boundings = await element.bounding_box()
@@ -517,6 +465,6 @@ class Frame:
 
         x, y = x + width // 2, y + height // 2
 
-        await frame.page.mouse.click(x, y, "left", 1, delay)
+        await self.page.mouse.click(x, y, "left", 1, delay)
 
-        await frame.page.keyboard.type(text, delay=delay)
+        await self.page.keyboard.type(text, delay=delay)

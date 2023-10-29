@@ -401,8 +401,7 @@ def create_cookie(name: str, value: str, **kwargs: Any) -> Cookie:
         "rfc2109": False,
     }
 
-    badargs = set(kwargs) - set(result)
-    if badargs:
+    if badargs := set(kwargs) - set(result):
         raise TypeError(f"create_cookie() got unexpected keyword arguments: {list(badargs)}")
 
     result.update(kwargs)
